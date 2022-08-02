@@ -15,17 +15,23 @@ def compareElements(e1, e2, xpath, position):
     e2Qname = etree.QName(e2.tag);
 
     if e1Qname.localname != e2Qname.localname:
-        print(bcolors.FAIL + "Element names differ at path: "+xpath + bcolors.ENDC)
+        print(f"{bcolors.FAIL}Element names differ at path: {xpath}{bcolors.ENDC}")
         return False
     if e1Qname.namespace != e2Qname.namespace:
-        print(bcolors.FAIL + "Element namespaces differ at path: "+xpath + bcolors.ENDC)
+        print(
+            f"{bcolors.FAIL}Element namespaces differ at path: {xpath}{bcolors.ENDC}"
+        )
+
         return False
 
     retval=True
     # check attributes
     if len(e1.attrib) != len(e2.attrib):
 #        print("%d != %d" % (len(e1.attrib), len(e2.attrib)))
-        print(bcolors.FAIL + "Different number of attributes at path: "+xpath + bcolors.ENDC)
+        print(
+            f"{bcolors.FAIL}Different number of attributes at path: {xpath}{bcolors.ENDC}"
+        )
+
         retval = False
     else:
         for attrKey in e1.attrib.keys():
@@ -33,7 +39,10 @@ def compareElements(e1, e2, xpath, position):
             attrValue2 = e2.get(attrKey)
 #            print attrKey + ": " + attrValue1 + " : " + attrValue2
             if attrValue1 != attrValue2:
-                print(bcolors.FAIL + "Different attribute values at path: "+xpath+"/@"+ attrKey + bcolors.ENDC)
+                print(
+                    f"{bcolors.FAIL}Different attribute values at path: {xpath}/@{attrKey}{bcolors.ENDC}"
+                )
+
                 retval = False
     # check text
     #xstr = lambda s: s or ""
@@ -43,7 +52,7 @@ def compareElements(e1, e2, xpath, position):
     text1 = e1.text
     text2 = e2.text
     if text1 != text2:
-        print(bcolors.FAIL + "Different text at path: "+xpath+"/text()" + bcolors.ENDC)
+        print(f"{bcolors.FAIL}Different text at path: {xpath}/text(){bcolors.ENDC}")
         retval = False
 
     # check child elements
@@ -51,16 +60,18 @@ def compareElements(e1, e2, xpath, position):
     children2=e2.getchildren()
     if len(children1) != len(children2):
 #        print("%d != %d" % (len(children1), len(children2)))
-        print(bcolors.FAIL + "Different number of children at path: "+xpath + bcolors.ENDC)
+        print(
+            f"{bcolors.FAIL}Different number of children at path: {xpath}{bcolors.ENDC}"
+        )
+
         retval = False
     else:
-        # Check children
-        pos=0
-        for child1 in children1:
-            pos += 1
+        for pos, child1 in enumerate(children1, start=1):
             if etree.iselement(child1):
                 child2 = children2[pos-1]
-                if not compareElements(child1, child2, xpath + "/*["+str(pos)+"]" , 0):
+                if not compareElements(
+                    child1, child2, f"{xpath}/*[{str(pos)}]", 0
+                ):
                     retval = False
 
     return retval

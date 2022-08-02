@@ -20,10 +20,7 @@ def _get_oscal_file_type(filename):
 
 def read_file(filename, ftype):
     with io.open(filename, 'r', encoding="utf-8") as f:
-        if ftype is "json":
-            filedata = json.load(f)
-        else:
-            filedata = f.read()
+        filedata = json.load(f) if ftype is "json" else f.read()
     return filedata, ftype
 
 

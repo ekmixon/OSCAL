@@ -27,21 +27,31 @@ except etree.XMLSchemaParseError as e:
     exit(1)
 
 # parse xml
-print(bcolors.OKBLUE + 'XML Validation Test Running' +bcolors.ENDC)
+print(f'{bcolors.OKBLUE}XML Validation Test Running{bcolors.ENDC}')
 try:
     doc = etree.parse(StringIO(xml_to_check))
-    print(bcolors.OKGREEN + 'File: ' + filename_xml + ', Schema: ' + filename_xsd + bcolors.ENDC)
-    print(bcolors.OKGREEN + 'SUCCESS: XML well formed, syntax ok.' + bcolors.ENDC)
+    print(
+        f'{bcolors.OKGREEN}File: {filename_xml}, Schema: {filename_xsd}{bcolors.ENDC}'
+    )
 
-# check for file IO error
+    print(f'{bcolors.OKGREEN}SUCCESS: XML well formed, syntax ok.{bcolors.ENDC}')
+
 except IOError:
-    print(bcolors.FAIL + 'File: ' + filename_xml + ', Schema: ' + filename_xsd+ bcolors.ENDC)
-    print(bcolors.FAIL + 'ERROR: Invalid File' + bcolors.ENDC)
+    print(
+        f'{bcolors.FAIL}File: {filename_xml}, Schema: {filename_xsd}{bcolors.ENDC}'
+    )
 
-# check for XML syntax errors
+    print(f'{bcolors.FAIL}ERROR: Invalid File{bcolors.ENDC}')
+
 except etree.XMLSyntaxError as err:
-    print(bcolors.FAIL + 'File: ' + filename_xml + ', Schema: ' + filename_xsd + bcolors.ENDC)
-    print(bcolors.FAIL + 'ERROR: XML Syntax Error, see error_syntax.log'+ bcolors.ENDC)
+    print(
+        f'{bcolors.FAIL}File: {filename_xml}, Schema: {filename_xsd}{bcolors.ENDC}'
+    )
+
+    print(
+        f'{bcolors.FAIL}ERROR: XML Syntax Error, see error_syntax.log{bcolors.ENDC}'
+    )
+
     with open('error_syntax.log', 'w') as error_log_file:
         error_log_file.write(str(err.error_log))
     quit()
@@ -51,15 +61,27 @@ except:
     quit()
 
 # validate against schema
-print(bcolors.OKBLUE + 'XSD Validation Test Running' +bcolors.ENDC)
+print(f'{bcolors.OKBLUE}XSD Validation Test Running{bcolors.ENDC}')
 try:
     xmlschema.assertValid(doc)
-    print(bcolors.OKGREEN + 'File: ' + filename_xml + ', Schema: ' + filename_xsd + bcolors.ENDC)
-    print(bcolors.OKGREEN + 'SUCCESS: XML valid, schema validation ok.' + bcolors.ENDC)
+    print(
+        f'{bcolors.OKGREEN}File: {filename_xml}, Schema: {filename_xsd}{bcolors.ENDC}'
+    )
+
+    print(
+        f'{bcolors.OKGREEN}SUCCESS: XML valid, schema validation ok.{bcolors.ENDC}'
+    )
+
 
 except etree.DocumentInvalid as err:
-    print(bcolors.FAIL + 'File: ' + filename_xml + ', Schema: ' + filename_xsd + filename_xsd + bcolors.ENDC)
-    print(bcolors.FAIL + 'ERROR: Schema validation error, see error_schema.log' + bcolors.ENDC)
+    print(
+        f'{bcolors.FAIL}File: {filename_xml}, Schema: {filename_xsd}{filename_xsd}{bcolors.ENDC}'
+    )
+
+    print(
+        f'{bcolors.FAIL}ERROR: Schema validation error, see error_schema.log{bcolors.ENDC}'
+    )
+
     with open('error_schema.log', 'w') as error_log_file:
         error_log_file.write(str(err.error_log))
     print(err.error_log)
